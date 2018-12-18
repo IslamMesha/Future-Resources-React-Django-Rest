@@ -24,7 +24,9 @@ MILITARY_STATUS = (
 
 
 # Multiple Inheritance
-class Employee(User, models.Model):
+class Employee(models.Model):
+    first_name = models.CharField(max_length=100, null=True, default='')
+    last_name = models.CharField(max_length=100, null=True, default='')
     middle_name = models.CharField(max_length=100, null=True, default='')
     full_name = models.CharField(max_length=200, null=True, default='')
     national_identifier = models.IntegerField(null=True, default='')
@@ -36,3 +38,6 @@ class Employee(User, models.Model):
     nationality = models.CharField(max_length=100, null=True, default='')
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     military_status = models.CharField(max_length=2, choices=MILITARY_STATUS)
+
+    class Meta:
+        ordering = ['id']
