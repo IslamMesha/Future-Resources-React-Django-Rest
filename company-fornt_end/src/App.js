@@ -37,8 +37,8 @@ class App extends Component {
                                 <td>{emp.middle_name}</td>
                                 <td>{emp.last_name}</td>
                                 <td>
-                                    <button onClick={this.editEmployeeDatail}>Edit</button>
-                                    <button onClick={this.getEmployeeDatail}>Detail</button>
+                                    <button onClick={() => this.editEmployeeDatail(emp)}>Edit</button>
+                                    <button onClick={() => this.getEmployeeDatail(emp)}>Detail</button>
                                     <button onClick={() => this.deleteEmployee(emp)}>Delete</button>
                                 </td>
                             </tr>
@@ -62,25 +62,49 @@ class App extends Component {
             });
     }
 
-    getEmployeeDatail() {
-        console.log("getEmployeeDatail")
+    getEmployeeDatail(emp) {
+        console.log("getEmployeeDatail" + Object.keys(emp));
+        axios.get('http://localhost:8000/employees/?page=' + this.state.pageNumber, {headers: {'Access-Control-Allow-Origin': '*'}})
+            .then(response => {
+                this.setState({employees: response.data.results});
+            });
     }
 
-    getNextPage() {
-        console.log("getNextPage")
-    }
-
-    getPreviousPage() {
-        console.log("getPreviousPage")
-    }
-
-    editEmployeeDatail() {
-        console.log("editEmployeeDatail")
+    editEmployeeDatail(emp) {
+        console.log("editEmployeeDatail" + Object.keys(emp));
+        axios.get('http://localhost:8000/employees/?page=' + this.state.pageNumber, {headers: {'Access-Control-Allow-Origin': '*'}})
+            .then(response => {
+                this.setState({employees: response.data.results});
+            });
     }
 
     deleteEmployee(emp) {
-        console.log("deleteEmployee" + Object.keys(emp))
+        axios.delete('http://127.0.0.1:8000/employees/' + emp.id + '/', {headers: {'Access-Control-Allow-Origin': '*'}})
+            .then(response => {
+                console.log(response);
+                alert("Employee successfully deleted.")
+            }).catch((error) => {
+            console.log(error);
+        });
+        this.getEmployeeList();
     }
+
+    getNextPage() {
+        console.log("getNextPage");
+        axios.get('http://localhost:8000/employees/?page=' + this.state.pageNumber, {headers: {'Access-Control-Allow-Origin': '*'}})
+            .then(response => {
+                this.setState({employees: response.data.results});
+            });
+    }
+
+    getPreviousPage() {
+        console.log("getPreviousPage");
+        axios.get('http://localhost:8000/employees/?page=' + this.state.pageNumber, {headers: {'Access-Control-Allow-Origin': '*'}})
+            .then(response => {
+                this.setState({employees: response.data.results});
+            });
+    }
+
 }
 
 export default App;
